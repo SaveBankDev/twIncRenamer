@@ -242,6 +242,7 @@ $.getScript(`https://twscripts.dev/scripts/twSDK.js?url=${document.currentScript
         }
 
         function collectIncDataFromOverview() {
+            const startTime = performance.now();
             const incDataMap = new Map();
             try {
                 jQuery('#incomings_table tbody tr.nowrap').each((_, incsRow) => {
@@ -257,9 +258,11 @@ $.getScript(`https://twscripts.dev/scripts/twSDK.js?url=${document.currentScript
                 console.error('Error processing the table:', outerError);
             }
             if (DEBUG) console.debug(`${scriptInfo}: incDataMap: `, incDataMap);
+            if (DEBUG) console.debug(`${scriptInfo}: Time to collect inc data: ${(performance.now() - startTime).toFixed(2)} milliseconds`);
             return incDataMap;
         }
         function collectIncDataFromVillage() {
+            const startTime = performance.now();
             const incDataMap = new Map();
             try {
                 jQuery('#commands_incomings form .vis tbody tr.command-row.no_ignored_command').each((_, incsRow) => {
@@ -275,6 +278,7 @@ $.getScript(`https://twscripts.dev/scripts/twSDK.js?url=${document.currentScript
                 console.error('Error processing the table:', outerError);
             }
             if (DEBUG) console.debug(`${scriptInfo}: incDataMap: `, incDataMap);
+            if (DEBUG) console.debug(`${scriptInfo}: Time to collect inc data: ${(performance.now() - startTime).toFixed(2)} milliseconds`);
             return incDataMap;
         }
         function renameLabels() {
@@ -290,6 +294,14 @@ $.getScript(`https://twscripts.dev/scripts/twSDK.js?url=${document.currentScript
             if (DEBUG) console.debug(`${scriptInfo}: Renaming labels with prependContent: ${prependContent}`);
             if (DEBUG) console.debug(`${scriptInfo}: Renaming labels with replaceContent: ${replaceContent}`);
             if (DEBUG) console.debug(`${scriptInfo}: Renaming labels with appendContent: ${appendContent}`);
+            if (screen === 'overview' && mode === null && subtype === null) {
+                incDataMap = collectIncDataFromVillage();
+            } else if (screen === 'overview_villages' && mode === 'incomings' && subtype === 'attacks') {
+                incDataMap = collectIncDataFromOverview();
+            } else {
+                console.error('Invalid screen, mode, or subtype');
+                return;
+            }
             let index = 0;
             incDataMap.forEach((incData, incId) => {
                 let newLabel = incData.label;
