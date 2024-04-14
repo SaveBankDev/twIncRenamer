@@ -1,12 +1,12 @@
 /*
 * Script Name: Mass Incomings Renamer
-* Version: v1
+* Version: v1.0
 * Last Updated: 2024-04-14
 * Author: SaveBank
 * Author Contact: Discord: savebank 
-* Approved: 
-* Approved Date: 
-* Mod: 
+* Approved: Yes
+* Approved Date: 2024-04-14
+* Mod: RedAlert
 */
 
 // User Input
@@ -18,7 +18,7 @@ var scriptConfig = {
     scriptData: {
         prefix: 'sbIR',
         name: 'Mass Incomings Renamer',
-        version: 'v1',
+        version: 'v1.0',
         author: 'SaveBank',
         authorUrl: 'https://forum.tribalwars.net/index.php?members/savebank.131111/',
         helpLink: 'https://forum.tribalwars.net/index.php?threads/mass-incomings-renamer.292218/',
