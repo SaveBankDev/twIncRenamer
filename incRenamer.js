@@ -1,5 +1,5 @@
 /*
-* Script Name: Incommings Renamer
+* Script Name: Mass Incommings Renamer
 * Version: v1
 * Last Updated: 2024-04-14
 * Author: SaveBank
@@ -17,7 +17,7 @@ var allIdsIR = ['prependContent', 'replaceContent', 'appendContent'];
 var scriptConfig = {
     scriptData: {
         prefix: 'sbIR',
-        name: 'Incommings Renamer',
+        name: 'Mass Incommings Renamer',
         version: 'v1',
         author: 'SaveBank',
         authorUrl: 'https://forum.tribalwars.net/index.php?members/savebank.131111/',
@@ -27,7 +27,7 @@ var scriptConfig = {
         en_DK: {
             'Can only be used in the village overview or incoming screen!': 'Can only be used in the village overview or incoming screen!',
             Help: 'Help',
-            'Incommings Renamer': 'Incommings Renamer',
+            'Mass Incommings Renamer': 'Mass Incommings Renamer',
             'There was an error!': 'There was an error!',
             'Prepend Content': 'Prepend Content',
             'Replace Content': 'Replace Content',
@@ -41,7 +41,7 @@ var scriptConfig = {
         de_DE: {
             'Can only be used in the village overview or incoming screen!': 'Kann nur im Dorf oder in Eintreffende Befehle verwendet werden!',
             Help: 'Hilfe',
-            'Incommings Renamer': 'Angriffsumbenenner',
+            'Mass Incommings Renamer': 'Angriffsumbenenner',
             'There was an error!': 'Es gab einen Fehler!',
             'Prepend Content': 'Inhalt voranstellen',
             'Replace Content': 'Inhalt ersetzen',
