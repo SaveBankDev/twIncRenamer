@@ -100,8 +100,7 @@ $.getScript(`https://twscripts.dev/scripts/twSDK.js?url=${document.currentScript
             UI.ErrorMessage('No incoming attacks found');
             return;
         }
-        const endTime = performance.now();
-        if (DEBUG) console.debug(`${scriptInfo}: Startup time: ${(endTime - startTime).toFixed(2)} milliseconds`);
+        if (DEBUG) console.debug(`${scriptInfo}: Startup time: ${(performance.now() - startTime).toFixed(2)} milliseconds`);
         // Entry point
         (async function () {
             try {
@@ -110,8 +109,7 @@ $.getScript(`https://twscripts.dev/scripts/twSDK.js?url=${document.currentScript
                 addEventHandlers();
                 initializeInputFields();
                 count();
-                const endTime = performance.now();
-                if (DEBUG) console.debug(`${scriptInfo}: Time to initialize: ${(endTime - startTime).toFixed(2)} milliseconds`);
+                if (DEBUG) console.debug(`${scriptInfo}: Time to initialize: ${(performance.now() - startTime).toFixed(2)} milliseconds`);
             } catch (error) {
                 UI.ErrorMessage(twSDK.tt('There was an error!'));
                 console.error(`${scriptInfo}: Error:`, error);
@@ -261,7 +259,7 @@ $.getScript(`https://twscripts.dev/scripts/twSDK.js?url=${document.currentScript
             return incDataMap;
         }
         function renameLabels() {
-            startTime = performance.now();
+            const startTime = performance.now();
             const settingsObject = getLocalStorage();
             const prependContent = settingsObject.prependContent;
             const replaceContent = settingsObject.replaceContent;
@@ -295,7 +293,7 @@ $.getScript(`https://twscripts.dev/scripts/twSDK.js?url=${document.currentScript
             if (DEBUG) console.debug(`${scriptInfo}: Time to rename labels: ${(performance.now() - startTime).toFixed(2)} milliseconds`);
         }
         function renameLabel(id, newLabel) {
-            startTime = performance.now();
+            const startTime = performance.now();
             try {
                 const quickEdit = jQuery(`span.quickedit[data-id="${id}"]`);
                 quickEdit.find('.rename-icon').click();
