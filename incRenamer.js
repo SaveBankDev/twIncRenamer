@@ -305,31 +305,31 @@ $.getScript(`https://twscripts.dev/scripts/twSDK.js?url=${document.currentScript
             if (DEBUG) console.debug(`${scriptInfo}: Time to rename label ${id}: ${(performance.now() - startTime).toFixed(2)} milliseconds`);
         }
         function count() {
-            const a = atob('aHR0cHM6Ly9hcGkuY291bnRlcmFwaS5kZXYvdjE=');
-            const d = game_data.player.id;
-            const e = btoa(game_data.player.id);
-            const b = atob('c2JJbmNSZW5hbWVy');
-            const c = atob('c2F2ZWJhbmtzY3JpcHRzdHc=');
+            const apiUrl = 'https://api.counterapi.dev/v1';
+            const playerId = game_data.player.id;
+            const encodedPlayerId = btoa(game_data.player.id);
+            const apiKey = 'sbIncRenamer'; // api key
+            const namespace = 'savebankscriptstw'; // namespace
             try {
-                $.getJSON(`${a}/${c}/${b}/up`, r => {
-                    if (DEBUG) console.debug(`Total script runs: ${r.count}`);
+                $.getJSON(`${apiUrl}/${namespace}/${apiKey}/up`, response => {
+                    if (DEBUG) console.debug(`Total script runs: ${response.count}`);
                 }).fail(() => { if (DEBUG) console.debug("Failed to fetch total script runs"); });
             } catch (error) { if (DEBUG) console.debug("Error fetching total script runs: ", error); }
 
             try {
-                $.getJSON(`${a}/${c}/${b}_id${e}/up`, r => {
-                    if (r.count === 1) {
-                        $.getJSON(`${a}/${c}/${b}_users/up`).fail(() => {
+                $.getJSON(`${apiUrl}/${namespace}/${apiKey}_id${encodedPlayerId}/up`, response => {
+                    if (response.count === 1) {
+                        $.getJSON(`${apiUrl}/${namespace}/${apiKey}_users/up`).fail(() => {
                             if (DEBUG) console.debug("Failed to increment user count");
                         });
                     }
-                    if (DEBUG) console.debug(`Player ${d} script runs: ${r.count}`);
+                    if (DEBUG) console.debug(`Player ${playerId} script runs: ${response.count}`);
                 }).fail(() => { if (DEBUG) console.debug("Failed to fetch player script runs"); });
             } catch (error) { if (DEBUG) console.debug("Error fetching player script runs: ", error); }
 
             try {
-                $.getJSON(`${a}/${c}/${b}_users`, r => {
-                    if (DEBUG) console.debug(`Total users: ${r.count}`);
+                $.getJSON(`${apiUrl}/${namespace}/${apiKey}_users`, response => {
+                    if (DEBUG) console.debug(`Total users: ${response.count}`);
                 }).fail(() => { if (DEBUG) console.debug("Failed to fetch total users"); });
             } catch (error) { if (DEBUG) console.debug("Error fetching total users: ", error); }
         }
