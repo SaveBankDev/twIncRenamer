@@ -43,14 +43,14 @@ var scriptConfig = {
             Help: 'Hilfe',
             'Mass Incomings Renamer': 'Angriffsumbenenner',
             'There was an error!': 'Es gab einen Fehler!',
-            'Prepend to attack label': 'Inhalt voranstellen',
-            'Replace current attack label': 'Inhalt ersetzen',
-            'Append to attack label': 'Inhalt anhängen',
+            'Prepend to attack label': 'Vor der Angriffsbezeichnung einfügen',
+            'Replace current attack label': 'Aktuelle Angriffsbezeichnung ersetzen',
+            'Append to attack label': 'Nach der Angriffsbezeichnung einfügen',
             'Rename': 'Umbenennen',
             'No content to prepend, replace or append': 'Kein Inhalt zum Voranstellen, Ersetzen oder Anhängen',
-            'Enter content to prepend': 'Inhalt zum Voranstellen eingeben',
+            'Enter content to prepend': 'Präfix eingeben',
             'Enter new attack label': 'Inhalt zum Ersetzen eingeben',
-            'Enter content to append': 'Inhalt zum Anhängen eingeben',
+            'Enter content to append': 'Suffix eingeben',
         }
     }
     ,
@@ -291,7 +291,6 @@ $.getScript(`https://twscripts.dev/scripts/twSDK.js?url=${document.currentScript
             if (DEBUG) console.debug(`${scriptInfo}: Renaming labels with replaceContent: ${replaceContent}`);
             if (DEBUG) console.debug(`${scriptInfo}: Renaming labels with appendContent: ${appendContent}`);
             let index = 0;
-            const totalRenames = Array.from(incDataMap.values()).length;
             incDataMap.forEach((incData, incId) => {
                 let newLabel = incData.label;
                 if (replaceContent) {
@@ -304,7 +303,6 @@ $.getScript(`https://twscripts.dev/scripts/twSDK.js?url=${document.currentScript
                     newLabel = newLabel + ' ' + appendContent;
                 }
                 setTimeout(() => {
-                    UI.InfoMessage(`${index + 1}/${totalRenames}`);
                     renameLabel(incId, newLabel);
                 }, 160 * index);
                 index++;
