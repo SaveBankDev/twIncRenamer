@@ -276,7 +276,7 @@ $.getScript(`https://twscripts.dev/scripts/twSDK.js?url=${document.currentScript
             incDataMap.forEach((incData, incId) => {
                 let newLabel = incData.label;
                 if (replaceContent) {
-                    newLabel = newLabel.replace(replaceContent, '');
+                    newLabel = replaceContent;
                 }
                 if (prependContent) {
                     newLabel = prependContent + ' ' + newLabel;
