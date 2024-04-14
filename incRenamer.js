@@ -21,7 +21,7 @@ var scriptConfig = {
         version: 'v1',
         author: 'SaveBank',
         authorUrl: 'https://forum.tribalwars.net/index.php?members/savebank.131111/',
-        helpLink: '',
+        helpLink: 'https://forum.tribalwars.net/index.php?threads/mass-incomings-renamer.292218/',
     },
     translations: {
         en_DK: {
