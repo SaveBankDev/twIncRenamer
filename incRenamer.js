@@ -29,13 +29,13 @@ var scriptConfig = {
             Help: 'Help',
             'Mass Incomings Renamer': 'Mass Incomings Renamer',
             'There was an error!': 'There was an error!',
-            'Prepend Content': 'Prepend Content',
-            'Replace Content': 'Replace Content',
-            'Append Content': 'Append Content',
+            'Prepend to attack label': 'Prepend to attack label',
+            'Replace current attack label': 'Replace current attack label',
+            'Append to attack label': 'Append to attack label',
             'Rename': 'Rename',
             'No content to prepend, replace or append': 'No content to prepend, replace or append',
             'Enter content to prepend': 'Enter content to prepend',
-            'Enter content to replace': 'Enter content to replace',
+            'Enter new attack label': 'Enter new attack label',
             'Enter content to append': 'Enter content to append',
         },
         de_DE: {
@@ -43,13 +43,13 @@ var scriptConfig = {
             Help: 'Hilfe',
             'Mass Incomings Renamer': 'Angriffsumbenenner',
             'There was an error!': 'Es gab einen Fehler!',
-            'Prepend Content': 'Inhalt voranstellen',
-            'Replace Content': 'Inhalt ersetzen',
-            'Append Content': 'Inhalt anhängen',
+            'Prepend to attack label': 'Inhalt voranstellen',
+            'Replace current attack label': 'Inhalt ersetzen',
+            'Append to attack label': 'Inhalt anhängen',
             'Rename': 'Umbenennen',
             'No content to prepend, replace or append': 'Kein Inhalt zum Voranstellen, Ersetzen oder Anhängen',
             'Enter content to prepend': 'Inhalt zum Voranstellen eingeben',
-            'Enter content to replace': 'Inhalt zum Ersetzen eingeben',
+            'Enter new attack label': 'Inhalt zum Ersetzen eingeben',
             'Enter content to append': 'Inhalt zum Anhängen eingeben',
         }
     }
@@ -122,15 +122,15 @@ $.getScript(`https://twscripts.dev/scripts/twSDK.js?url=${document.currentScript
             const content = `
                 <div class="ra-mb10 sb-grid sb-grid-30-40-30">
                     <div>
-                        <label for="prependContent">${twSDK.tt('Prepend Content')}</label>
+                        <label for="prependContent">${twSDK.tt('Prepend to attack label')}</label>
                         <input type="text" id="prependContent" placeholder="${twSDK.tt('Enter content to prepend')}" />
                     </div>
                     <div>
-                        <label for="replaceContent">${twSDK.tt('Replace Content')}</label>
-                        <input type="text" id="replaceContent" placeholder="${twSDK.tt('Enter content to replace')}" />
+                        <label for="replaceContent">${twSDK.tt('Replace current attack label')}</label>
+                        <input type="text" id="replaceContent" placeholder="${twSDK.tt('Enter new attack label')}" />
                     </div>
                     <div>
-                        <label for="appendContent">${twSDK.tt('Append Content')}</label>
+                        <label for="appendContent">${twSDK.tt('Append to attack label')}</label>
                         <input type="text" id="appendContent" placeholder="${twSDK.tt('Enter content to append')}" />
                     </div>
                 </div>
@@ -206,12 +206,31 @@ $.getScript(`https://twscripts.dev/scripts/twSDK.js?url=${document.currentScript
             switch (inputId) {
                 case "prependContent":
                     inputValue = $(this).val();
-                    break;
-                case "replaceContent":
-                    inputValue = $(this).val();
+                    if (inputValue) {
+                        $('#replaceContent').prop('disabled', true);
+                    } else {
+                        if (!$('#prependContent').val() && !$('#appendContent').val()) {
+                            $('#replaceContent').prop('disabled', false);
+                        }
+                    }
                     break;
                 case "appendContent":
                     inputValue = $(this).val();
+                    if (inputValue) {
+                        $('#replaceContent').prop('disabled', true);
+                    } else {
+                        if (!$('#prependContent').val() && !$('#appendContent').val()) {
+                            $('#replaceContent').prop('disabled', false);
+                        }
+                    }
+                    break;
+                case "replaceContent":
+                    inputValue = $(this).val();
+                    if (inputValue) {
+                        $('#prependContent, #appendContent').prop('disabled', true);
+                    } else {
+                        $('#prependContent, #appendContent').prop('disabled', false);
+                    }
                     break;
                 default:
                     console.error(`${scriptInfo}: Unknown id: ${inputId}`)
