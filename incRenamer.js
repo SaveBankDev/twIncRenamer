@@ -37,6 +37,7 @@ var scriptConfig = {
             'Enter content to prepend': 'Enter content to prepend',
             'Enter new attack label': 'Enter new attack label',
             'Enter content to append': 'Enter content to append',
+            'No incoming attacks found': 'No incoming attacks found',
         },
         de_DE: {
             'Can only be used in the village overview or incoming screen!': 'Kann nur im Dorf oder in Eintreffende Befehle verwendet werden!',
@@ -51,6 +52,7 @@ var scriptConfig = {
             'Enter content to prepend': 'Präfix eingeben',
             'Enter new attack label': 'Inhalt zum Ersetzen eingeben',
             'Enter content to append': 'Suffix eingeben',
+            'No incoming attacks found': 'Keine eingehenden Angriffe gefunden',
         }
     }
     ,
@@ -97,7 +99,7 @@ $.getScript(`https://twscripts.dev/scripts/twSDK.js?url=${document.currentScript
             return;
         }
         if (incDataMap.size === 0) {
-            UI.ErrorMessage('No incoming attacks found');
+            UI.ErrorMessage(twSDK.tt('No incoming attacks found'));
             return;
         }
         if (DEBUG) console.debug(`${scriptInfo}: Startup time: ${(performance.now() - startTime).toFixed(2)} milliseconds`);
