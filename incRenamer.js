@@ -144,32 +144,37 @@ $.getScript(`https://twscripts.dev/scripts/twSDK.js?url=${document.currentScript
                 'sbIncRenamerWidget',
                 'sb-inc-renamer-widget',
                 css,
-                '600px',
+                '700px',
             );
         }
         function generateCSS() {
             // Start building the CSS string
             let css = `
-                    .sb-grid-30-40-30 {
-                        grid-template-columns: calc(30% - 5px) calc(40% - 10px) calc(30% - 5px);
-                    }
-                    .sb-grid {
-                        display: grid;
-                        grid-gap: 10px;
-                    }
-                    .sb-grid label {
-                        display: block;
-                        margin-bottom: 5px;
-                        font-weight: bold;
-                    }
-                    .sb-grid input[type="text"] {
-                        width: 100%;
-                    }
-                    .btn-confirm-yes { 
-                    padding: 3px; 
-                    margin: 5px; 
-                    }
-            `;
+            .sb-grid-30-40-30 {
+                grid-template-columns: calc(30% - 5px) calc(40% - 10px) calc(30% - 5px);
+            }
+            .sb-grid {
+                display: grid;
+                grid-gap: 10px;
+            }
+            .sb-grid > div {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+            .sb-grid label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
+            .sb-grid input[type="text"] {
+                width: 100%;
+            }
+            .btn-confirm-yes { 
+                padding: 3px; 
+                margin: 5px; 
+            }
+    `;
 
             return css;
         }
@@ -188,11 +193,25 @@ $.getScript(`https://twscripts.dev/scripts/twSDK.js?url=${document.currentScript
             const settingsObject = getLocalStorage();
             if (DEBUG) console.debug(`${scriptInfo}: Settings object from local storage: `, settingsObject);
 
+            if (settingsObject.replaceContent) {
+                settingsObject.prependContent = '';
+                settingsObject.appendContent = '';
+                saveLocalStorage(settingsObject);
+            }
+
             for (let id in settingsObject) {
                 if (settingsObject.hasOwnProperty(id)) {
                     const element = document.getElementById(id);
                     if (element) {
                         element.value = settingsObject[id];
+
+                        if ((id === 'prependContent' || id === 'appendContent') && settingsObject[id]) {
+                            document.getElementById('replaceContent').disabled = true;
+                        }
+                        if (id === 'replaceContent' && settingsObject[id]) {
+                            document.getElementById('prependContent').disabled = true;
+                            document.getElementById('appendContent').disabled = true;
+                        }
                     } else {
                         console.error(`${scriptInfo}: Element not found for ID: ${id} in `, settingsObject);
                     }
