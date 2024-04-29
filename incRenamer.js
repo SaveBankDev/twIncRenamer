@@ -270,7 +270,8 @@ $.getScript(`https://twscripts.dev/scripts/twSDK.js?url=${document.currentScript
                     try {
                         const incId = parseInt(jQuery(incsRow).find('span.quickedit').attr('data-id'));
                         const incLabel = jQuery(incsRow).find('span.quickedit-label').text().trim();
-                        incDataMap.set(incId, { label: incLabel });
+                        const commandType = "attack";
+                        incDataMap.set(incId, { label: incLabel, commandType: commandType });
                     } catch (innerError) {
                         console.error('Error processing a row:', innerError);
                     }
@@ -290,7 +291,8 @@ $.getScript(`https://twscripts.dev/scripts/twSDK.js?url=${document.currentScript
                     try {
                         const incId = parseInt(jQuery(incsRow).find('span.quickedit').attr('data-id'));
                         const incLabel = jQuery(incsRow).find('span.quickedit-label').text().trim();
-                        incDataMap.set(incId, { label: incLabel });
+                        const commandType = jQuery(incsRow).find('span.icon-container span.command_hover_details').attr('data-command-type');
+                        incDataMap.set(incId, { label: incLabel, commandType: commandType });
                     } catch (innerError) {
                         console.error('Error processing a row:', innerError);
                     }
@@ -325,6 +327,10 @@ $.getScript(`https://twscripts.dev/scripts/twSDK.js?url=${document.currentScript
             }
             let index = 0;
             incDataMap.forEach((incData, incId) => {
+                let type = incData.commandType;
+                if (type !== 'attack') {
+                    return;
+                }
                 let newLabel = incData.label;
                 if (replaceContent) {
                     newLabel = replaceContent;
