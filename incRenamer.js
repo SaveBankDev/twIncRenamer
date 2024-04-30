@@ -291,7 +291,17 @@ $.getScript(`https://twscripts.dev/scripts/twSDK.js?url=${document.currentScript
                     try {
                         const incId = parseInt(jQuery(incsRow).find('span.quickedit').attr('data-id'));
                         const incLabel = jQuery(incsRow).find('span.quickedit-label').text().trim();
-                        const commandType = jQuery(incsRow).find('span.icon-container span.command_hover_details').attr('data-command-type');
+                        let commandType = jQuery(incsRow).find('span.icon-container span.command_hover_details').attr('data-command-type');
+
+                        if (typeof commandType === 'undefined') {
+                            let imgSrc = jQuery(incsRow).find('span.icon-container span:first img').attr('src');
+                            if (typeof imgSrc !== 'undefined') {
+                                let imgName = imgSrc.split('/').pop();
+                                commandType = imgName.substring(0, imgName.length - 4); // remove .png
+                            } else {
+                                commandType = "attack";
+                            }
+                        }                        
                         incDataMap.set(incId, { label: incLabel, commandType: commandType });
                     } catch (innerError) {
                         console.error('Error processing a row:', innerError);
