@@ -65,7 +65,7 @@ var scriptConfig = {
 
 
 
-$.getScript(`https://twscripts.dev/scripts/twSDK.js?url=${document.currentScript.src}`,
+$.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@main/twSDK.js`,
     async function () {
         const startTime = performance.now();
         if (DEBUG) {
