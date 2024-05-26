@@ -1,7 +1,7 @@
 /*
 * Script Name: Mass Incomings Renamer
-* Version: v1.0
-* Last Updated: 2024-04-14
+* Version: v1.0.1
+* Last Updated: 2024-05-26
 * Author: SaveBank
 * Author Contact: Discord: savebank 
 * Approved: Yes
@@ -18,7 +18,7 @@ var scriptConfig = {
     scriptData: {
         prefix: 'sbIR',
         name: 'Mass Incomings Renamer',
-        version: 'v1.0',
+        version: 'v1.0.1',
         author: 'SaveBank',
         authorUrl: 'https://forum.tribalwars.net/index.php?members/savebank.131111/',
         helpLink: 'https://forum.tribalwars.net/index.php?threads/mass-incomings-renamer.292218/',
@@ -65,7 +65,7 @@ var scriptConfig = {
 
 
 
-$.getScript(`https://twscripts.dev/scripts/twSDK.js?url=${document.currentScript.src}`,
+$.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@main/twSDK.js`,
     async function () {
         const startTime = performance.now();
         if (DEBUG) {
@@ -338,7 +338,7 @@ $.getScript(`https://twscripts.dev/scripts/twSDK.js?url=${document.currentScript
             let index = 0;
             incDataMap.forEach((incData, incId) => {
                 let type = incData.commandType;
-                if (type !== 'attack') {
+                if (!type.startsWith('attack')) {
                     return;
                 }
                 let newLabel = incData.label;
