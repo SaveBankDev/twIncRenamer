@@ -22,7 +22,7 @@ var scriptConfig = {
     scriptData: {
         prefix: 'sbIR',
         name: 'Mass Incomings Renamer',
-        version: 'v1.0.1',
+        version: 'v1.1.0',
         author: 'SaveBank',
         authorUrl: 'https://forum.tribalwars.net/index.php?members/savebank.131111/',
         helpLink: 'https://forum.tribalwars.net/index.php?threads/mass-incomings-renamer.292218/',
