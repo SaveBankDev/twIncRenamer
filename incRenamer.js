@@ -1,7 +1,7 @@
 /*
 * Script Name: Mass Incomings Renamer
-* Version: v1.0.1
-* Last Updated: 2024-05-26
+* Version: v1.1.0
+* Last Updated: 2024-10-13
 * Author: SaveBank
 * Author Contact: Discord: savebank 
 * Approved: Yes
@@ -11,6 +11,10 @@
 
 // User Input
 if (typeof DEBUG !== 'boolean') DEBUG = false;
+if (typeof QUICKSTART !== 'boolean') QUICKSTART = false;
+if (typeof PREFIX !== 'string') PREFIX = '';
+if (typeof REPLACE !== 'string') REPLACE = '';
+if (typeof SUFFIX !== 'string') SUFFIX = '';
 
 var allIdsIR = ['prependContent', 'replaceContent', 'appendContent'];
 
@@ -107,9 +111,13 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
         (async function () {
             try {
                 const startTime = performance.now();
-                renderUI();
-                addEventHandlers();
-                initializeInputFields();
+                if(QUICKSTART) {
+                    renameLabels();
+                } else {
+                    renderUI();
+                    addEventHandlers();
+                    initializeInputFields();
+                }
                 count();
                 if (DEBUG) console.debug(`${scriptInfo}: Time to initialize: ${(performance.now() - startTime).toFixed(2)} milliseconds`);
             } catch (error) {
@@ -316,10 +324,20 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
         }
         function renameLabels() {
             const startTime = performance.now();
-            const settingsObject = getLocalStorage();
-            const prependContent = settingsObject.prependContent;
-            const replaceContent = settingsObject.replaceContent;
-            const appendContent = settingsObject.appendContent;
+            let prependContent;
+            let replaceContent;
+            let appendContent;
+
+            if (QUICKSTART) {
+                prependContent = PREFIX;
+                replaceContent = REPLACE;
+                appendContent = SUFFIX;
+            } else {
+                const settingsObject = getLocalStorage();
+                prependContent = settingsObject.prependContent;
+                replaceContent = settingsObject.replaceContent;
+                appendContent = settingsObject.appendContent;
+            }
             if (!prependContent && !replaceContent && !appendContent) {
                 UI.ErrorMessage(twSDK.tt('No content to prepend, replace or append'));
                 return;
