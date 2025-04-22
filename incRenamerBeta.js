@@ -1,7 +1,7 @@
 /*
 * Script Name: Mass Incomings Renamer
-* Version: v1.1.0
-* Last Updated: 2024-10-13
+* Version: v1.1.1
+* Last Updated: 2024-04-22
 * Author: SaveBank
 * Author Contact: Discord: savebank 
 * Approved: Yes
@@ -22,7 +22,7 @@ var scriptConfig = {
     scriptData: {
         prefix: 'sbIR',
         name: 'Mass Incomings Renamer',
-        version: 'v1.0.1',
+        version: 'v1.1.1',
         author: 'SaveBank',
         authorUrl: 'https://forum.tribalwars.net/index.php?members/savebank.131111/',
         helpLink: 'https://forum.tribalwars.net/index.php?threads/mass-incomings-renamer.292218/',
@@ -305,7 +305,7 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
                             let imgSrc = jQuery(incsRow).find('span.icon-container span:first img').attr('src');
                             if (typeof imgSrc !== 'undefined') {
                                 let imgName = imgSrc.split('/').pop();
-                                commandType = imgName.substring(0, imgName.length - 4); // remove .png
+                                commandType = imgName.substring(0, imgName.length - 5); // remove .webp
                             } else {
                                 commandType = "attack";
                             }
