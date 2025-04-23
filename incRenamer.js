@@ -332,6 +332,10 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
                 prependContent = PREFIX;
                 replaceContent = REPLACE;
                 appendContent = SUFFIX;
+                PREFIX = '';
+                REPLACE = '';
+                SUFFIX = '';
+                QUICKSTART = false;
             } else {
                 const settingsObject = getLocalStorage();
                 prependContent = settingsObject.prependContent;
