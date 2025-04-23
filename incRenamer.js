@@ -1,7 +1,7 @@
 /*
 * Script Name: Mass Incomings Renamer
-* Version: v1.1.0
-* Last Updated: 2024-10-13
+* Version: v1.1.1
+* Last Updated: 2024-04-22
 * Author: SaveBank
 * Author Contact: Discord: savebank 
 * Approved: Yes
@@ -22,7 +22,7 @@ var scriptConfig = {
     scriptData: {
         prefix: 'sbIR',
         name: 'Mass Incomings Renamer',
-        version: 'v1.1.0',
+        version: 'v1.1.1',
         author: 'SaveBank',
         authorUrl: 'https://forum.tribalwars.net/index.php?members/savebank.131111/',
         helpLink: 'https://forum.tribalwars.net/index.php?threads/mass-incomings-renamer.292218/',
@@ -305,7 +305,7 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
                             let imgSrc = jQuery(incsRow).find('span.icon-container span:first img').attr('src');
                             if (typeof imgSrc !== 'undefined') {
                                 let imgName = imgSrc.split('/').pop();
-                                commandType = imgName.substring(0, imgName.length - 4); // remove .png
+                                commandType = imgName.substring(0, imgName.length - 5); // remove .webp
                             } else {
                                 commandType = "attack";
                             }
@@ -332,10 +332,6 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
                 prependContent = PREFIX;
                 replaceContent = REPLACE;
                 appendContent = SUFFIX;
-                PREFIX = '';
-                REPLACE = '';
-                SUFFIX = '';
-                QUICKSTART = false;
             } else {
                 const settingsObject = getLocalStorage();
                 prependContent = settingsObject.prependContent;
@@ -394,8 +390,6 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
         }
         function count() {
             const apiUrl = 'https://api.counterapi.dev/v1';
-            const playerId = game_data.player.id;
-            const encodedPlayerId = btoa(game_data.player.id);
             const apiKey = 'sbIncRenamer'; // api key
             const namespace = 'savebankscriptstw'; // namespace
             try {
@@ -404,22 +398,6 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
                 }).fail(() => { if (DEBUG) console.debug("Failed to fetch total script runs"); });
             } catch (error) { if (DEBUG) console.debug("Error fetching total script runs: ", error); }
 
-            try {
-                $.getJSON(`${apiUrl}/${namespace}/${apiKey}_id${encodedPlayerId}/up`, response => {
-                    if (response.count === 1) {
-                        $.getJSON(`${apiUrl}/${namespace}/${apiKey}_users/up`).fail(() => {
-                            if (DEBUG) console.debug("Failed to increment user count");
-                        });
-                    }
-                    if (DEBUG) console.debug(`Player ${playerId} script runs: ${response.count}`);
-                }).fail(() => { if (DEBUG) console.debug("Failed to fetch player script runs"); });
-            } catch (error) { if (DEBUG) console.debug("Error fetching player script runs: ", error); }
-
-            try {
-                $.getJSON(`${apiUrl}/${namespace}/${apiKey}_users`, response => {
-                    if (DEBUG) console.debug(`Total users: ${response.count}`);
-                }).fail(() => { if (DEBUG) console.debug("Failed to fetch total users"); });
-            } catch (error) { if (DEBUG) console.debug("Error fetching total users: ", error); }
         }
         function getLocalStorage() {
             const localStorageSettings = JSON.parse(localStorage.getItem('sbIncRenamer'));
