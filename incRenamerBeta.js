@@ -1,7 +1,7 @@
 /*
 * Script Name: Mass Incomings Renamer
 * Version: v1.1.1
-* Last Updated: 2024-04-22
+* Last Updated: 2026-02-20
 * Author: SaveBank
 * Author Contact: Discord: savebank 
 * Approved: Yes
@@ -21,6 +21,154 @@ if (typeof REPLACE !== 'string') REPLACE = '';
 if (typeof SUFFIX !== 'string') SUFFIX = '';
 
 var allIdsIR = ['prependContent', 'replaceContent', 'appendContent'];
+
+window.twSDK = {
+    scriptData: {},
+    translations: {},
+    allowedMarkets: [],
+    allowedScreens: [],
+    allowedModes: [],
+    enableCountApi: false,
+    isDebug: false,
+    market: game_data.market,
+
+    _initDebug: function () {
+        if (this.isDebug) {
+            console.debug(`${this.scriptInfo()} It works 🚀!`);
+            console.debug(`${this.scriptInfo()} HELP:`, this.scriptData.helpLink);
+        }
+    },
+    addGlobalStyle: function () {
+        return `
+            .ra-table-container { overflow-y: auto; overflow-x: hidden; height: auto; max-height: 400px; }
+            .ra-table th { font-size: 14px; }
+            .ra-table th label { margin: 0; padding: 0; }
+            .ra-table th,
+            .ra-table td { padding: 5px; text-align: center; }
+            .ra-table td a { word-break: break-all; }
+            .ra-table a:focus { color: blue; }
+            .ra-table a.btn:focus { color: #fff; }
+            .ra-table tr:nth-of-type(2n) td { background-color: #f0e2be }
+            .ra-table tr:nth-of-type(2n+1) td { background-color: #fff5da; }
+            .ra-mb10 { margin-bottom: 10px !important; }
+            .ra-popup-content { width: 360px; }
+            .custom-close-button { right: 0; top: 0; }
+            @media (max-width: 480px) {
+                .ra-fixed-widget {
+                    position: relative !important;
+                    top: 0;
+                    left: 0;
+                    display: block;
+                    width: auto;
+                    height: auto;
+                    z-index: 1;
+                }
+                .custom-close-button { display: none; }
+                .ra-popup-content { width: 100%; }
+            }
+        `;
+    },
+    checkValidLocation: function (type) {
+        switch (type) {
+            case 'screen':
+                return this.allowedScreens.includes(this.getParameterByName('screen'));
+            case 'mode':
+                return this.allowedModes.includes(this.getParameterByName('mode'));
+            default:
+                return false;
+        }
+    },
+    getParameterByName: function (name, url = window.location.href) {
+        return new URL(url).searchParams.get(name);
+    },
+    init: async function (scriptConfig) {
+        const {
+            scriptData,
+            translations,
+            allowedMarkets,
+            allowedScreens,
+            allowedModes,
+            isDebug,
+            enableCountApi,
+        } = scriptConfig;
+
+        this.scriptData = scriptData;
+        this.translations = translations;
+        this.allowedMarkets = allowedMarkets;
+        this.allowedScreens = allowedScreens;
+        this.allowedModes = allowedModes;
+        this.enableCountApi = enableCountApi;
+        this.isDebug = isDebug;
+        this._initDebug();
+    },
+    redirectTo: function (location) {
+        window.location.assign(game_data.link_base_pure + location);
+    },
+    renderFixedWidget: function (
+        body,
+        id,
+        mainClass,
+        customStyle,
+        width,
+        customName = this.scriptData.name
+    ) {
+        const globalStyle = this.addGlobalStyle();
+
+        const content = `
+            <div class="${mainClass} ra-fixed-widget" id="${id}">
+                <div class="${mainClass}-header">
+                    <h3>${this.tt(customName)}</h3>
+                </div>
+                <div class="${mainClass}-body">
+                    ${body}
+                </div>
+                <div class="${mainClass}-footer">
+                    <small>
+                        <strong>${this.tt(customName)} ${this.scriptData.version}</strong> -
+                        <a href="${this.scriptData.authorUrl}" target="_blank" rel="noreferrer noopener">${this.scriptData.author}</a> -
+                        <a href="${this.scriptData.helpLink}" target="_blank" rel="noreferrer noopener">${this.tt('Help')}</a>
+                    </small>
+                </div>
+                <a class="popup_box_close custom-close-button" href="#">&nbsp;</a>
+            </div>
+            <style>
+                .${mainClass} { position: fixed; top: 10vw; right: 10vw; z-index: 99999; border: 2px solid #7d510f; border-radius: 10px; width: ${
+            width ?? '360px'
+        }; overflow-y: auto; padding: 10px; background: #e3d5b3 url('/graphic/index/main_bg.jpg') scroll right top repeat; }
+                .${mainClass} * { box-sizing: border-box; }
+                ${globalStyle}
+                ${customStyle}
+            </style>
+        `;
+
+        if (jQuery(`#${id}`).length < 1) {
+            if (typeof mobiledevice !== 'undefined' && mobiledevice) {
+                jQuery('#content_value').prepend(content);
+            } else {
+                jQuery('#contentContainer').prepend(content);
+                jQuery(`#${id}`).draggable({
+                    cancel: '.ra-table, input, textarea, button, select, option',
+                });
+
+                jQuery(`#${id} .custom-close-button`).on('click', function (e) {
+                    e.preventDefault();
+                    jQuery(`#${id}`).remove();
+                });
+            }
+        } else {
+            jQuery(`.${mainClass}-body`).html(body);
+        }
+    },
+    scriptInfo: function (scriptData = this.scriptData) {
+        return `[${scriptData.name} ${scriptData.version}]`;
+    },
+    tt: function (string) {
+        if (this.translations[game_data.locale] !== undefined) {
+            return this.translations[game_data.locale][string] || string;
+        }
+        return (this.translations.en_DK && this.translations.en_DK[string]) || string;
+    },
+};
 
 var scriptConfig = {
     scriptData: {
@@ -73,8 +221,7 @@ var scriptConfig = {
 
 
 
-$.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@main/twSDK.js`,
-    async function () {
+(async function () {
         const startTime = performance.now();
         if (DEBUG) {
             console.debug(`Init`);
@@ -122,7 +269,6 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
                     addEventHandlers();
                     initializeInputFields();
                 }
-                count();
                 if (DEBUG) console.debug(`${scriptInfo}: Time to initialize: ${(performance.now() - startTime).toFixed(2)} milliseconds`);
             } catch (error) {
                 UI.ErrorMessage(twSDK.tt('There was an error!'));
@@ -396,17 +542,6 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
             }
             if (DEBUG) console.debug(`${scriptInfo}: Time to rename label ${id}: ${(performance.now() - startTime).toFixed(2)} milliseconds`);
         }
-        function count() {
-            const apiUrl = 'https://api.counterapi.dev/v1';
-            const apiKey = 'sbIncRenamer'; // api key
-            const namespace = 'savebankscriptstw'; // namespace
-            try {
-                $.getJSON(`${apiUrl}/${namespace}/${apiKey}/up`, response => {
-                    if (DEBUG) console.debug(`Total script runs: ${response.count}`);
-                }).fail(() => { if (DEBUG) console.debug("Failed to fetch total script runs"); });
-            } catch (error) { if (DEBUG) console.debug("Error fetching total script runs: ", error); }
-
-        }
         function getLocalStorage() {
             const localStorageSettings = JSON.parse(localStorage.getItem('sbIncRenamer'));
             // Check if all expected settings are in localStorageSettings
@@ -441,5 +576,5 @@ $.getScript(`https://cdn.jsdelivr.net/gh/SaveBankDev/Tribal-Wars-Scripts-SDK@mai
             // Stringify and save the settings object
             localStorage.setItem('sbIncRenamer', JSON.stringify(settingsObject));
         }
-    });
+})();
 
